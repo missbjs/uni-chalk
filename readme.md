@@ -40,6 +40,40 @@ Uni-Chalk is a fork of the popular [chalk](https://github.com/chalk/chalk) packa
 
 Original chalk package: [https://github.com/chalk/chalk](https://github.com/chalk/chalk)
 
+## Cross-Environment Compatibility
+
+Uni-Chalk provides flexible cross-environment usage capabilities:
+
+- **Auto-detection**: Automatically uses the appropriate version (ANSI codes in Node.js, CSS in browsers)
+- **Explicit control**: Force Node.js or browser mode using the `createChalk` function
+- **Cross usage**: Use browser-styled output in Node.js or Node.js-styled output in browsers for specific purposes
+
+Example - Cross-environment usage:
+```js
+import { createChalk } from 'uni-chalk';
+
+// Force browser mode in Node.js (outputs CSS styling arrays)
+const browserChalk = createChalk({ isTerminal: false });
+console.log(browserChalk.red.bold('Hello World'));
+// Output: ['%cHello World', 'color: #ff0000; font-weight: bold']
+
+// Force terminal mode in browser (outputs plain text - no styling)
+const terminalChalk = createChalk({ isTerminal: true });
+console.log(terminalChalk.red.bold('Hello World'));
+// Output: 'Hello World' (no visible styling in browser console)
+
+// Auto-detection (default behavior)
+const autoChalk = createChalk();
+console.log(autoChalk.red.bold('Hello World'));
+// Output: ANSI codes in Node.js, CSS array in browsers
+```
+
+This is particularly useful for:
+- Libraries that need consistent output across environments
+- Debugging and logging that works the same in both Node.js and browsers
+- Testing browser-styled output in Node.js environments
+- Printing styled output to different destinations based on context
+
 ## Install
 
 ```sh

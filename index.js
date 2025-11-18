@@ -8,15 +8,15 @@ export * from './source/index.js';
 
 
 // For convenience, also export a function that detects the environment
-// This version returns a promise that resolves to the chalk instance
-export function createChalk({ isTerminal = true }) {
-    if (isTerminal)
+// This version returns the appropriate chalk instance based on environment
+export function createChalk({ isTerminal } = {}) {
+    // If isTerminal is explicitly provided, use it
+    if (isTerminal === true)
         return chalkNode;
     else if (isTerminal === false)
         return chalkBrowser;
 
-    //isTerminal is undefined
-
+    // isTerminal is undefined, auto-detect environment
     // Check if we're in a TTY environment (Node.js terminal)
     const isTTY = typeof process !== 'undefined' &&
         process.stdout &&
@@ -26,37 +26,18 @@ export function createChalk({ isTerminal = true }) {
     const isBrowser = typeof window !== 'undefined' &&
         typeof window.document !== 'undefined';
 
-    if (isTTY || (!isBrowser && typeof process !== 'undefined')) {
-        // Return the main Node.js version for TTY environments
-        return chalkNode //import('./source/index.js').then(module => module.default);
+    if (isBrowser) {
+        // Return the browser version for browser environments
+        return chalkBrowser;
+    } else if (isTTY || typeof process !== 'undefined') {
+        // Return the main Node.js version for TTY environments or Node.js environments
+        return chalkNode;
     } else {
-        // Return the browser version for browser environments or non-TTY Node.js
-        return chalkBrowser //import('./source/chalk.browser.js').then(module => module.default);
+        // Fallback to browser version for non-TTY Node.js or unknown environments
+        return chalkBrowser;
     }
 }
 
-// // Create and export the default chalk instance based on environment
-// // This will be a promise that resolves to the appropriate chalk instance
-
-// // Check if we're in a TTY environment (Node.js terminal)
-// const isTTY = typeof process !== 'undefined' &&
-//     process.stdout &&
-//     process.stdout.isTTY !== undefined;
-
-// // Check if we're in a browser environment
-// const isBrowser = typeof window !== 'undefined' &&
-//     typeof window.document !== 'undefined';
-
-// // Determine which version to use as default
-// let defaultChalk;
-// if (isTTY || (!isBrowser && typeof process !== 'undefined')) {
-//     // For TTY environments, use the Node.js version
-//     defaultChalk = import('./source/index.js').then(module => module.default);
-// } else {
-//     // For browser environments, use the browser version
-//     defaultChalk = import('./source/chalk.browser.js').then(module => module.default);
-// }
-
-export const chalk = createChalk({ isTerminal: false });
+export const chalk = createChalk();
 export default chalk;
 export { chalkBrowser, chalkNode }
