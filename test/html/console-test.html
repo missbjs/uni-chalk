@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Chalk Console Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+
+    .test-section {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .test-result {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+    }
+
+    .console-output {
+      background: #000;
+      color: #00ff00;
+      padding: 15px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      margin: 10px 0;
+      min-height: 100px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    h1,
+    h2 {
+      color: #333;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Chalk Console Test</h1>
+  <p>This page tests chalk browser mode and displays results both in console and on page.</p>
+
+  <div class="test-section">
+    <h2>Visual Test Results</h2>
+    <p>These are the styled texts displayed directly on the page:</p>
+    <div id="visual-results"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>Console Output</h2>
+    <p>Open the browser console to see the detailed output:</p>
+    <div class="console-output" id="console-output"></div>
+  </div>
+
+  <script type="module">
+    // Capture console output
+    const consoleOutput = document.getElementById('console-output');
+
+    // Override console.log to capture output
+    const originalLog = console.log;
+    const originalError = console.error;
+
+    console.log = function (...args) {
+      originalLog.apply(console, args);
+      appendToConsoleOutput('LOG: ' + args.join(' '));
+    };
+
+    console.error = function (...args) {
+      originalError.apply(console, args);
+      appendToConsoleOutput('ERROR: ' + args.join(' '), 'error');
+    };
+
+    function appendToConsoleOutput(text, type = 'log') {
+      const line = document.createElement('div');
+      line.textContent = text;
+      if (type === 'error') {
+        line.style.color = '#ff5555';
+      }
+      consoleOutput.appendChild(line);
+      consoleOutput.scrollTop = consoleOutput.scrollHeight;
+    }
+
+    // Test chalk browser mode
+    async function runChalkTests() {
+      try {
+        // Import the browser version of chalk
+        const { default: chalk } = await import('../../source/chalk.browser.js');
+
+        // Clear console
+        console.clear();
+
+        // Log test header
+        console.log('=== Chalk Browser Mode Console Test ===');
+
+        // Get visual results container
+        const visualResults = document.getElementById('visual-results');
+
+        // Test various chalk functions and log results
+        const tests = [
+          {
+            name: 'Hex Color Test',
+            result: chalk.hex('#ff6347')('Hello World'),
+            css: 'color: rgb(255, 99, 71);'
+          },
+          {
+            name: 'RGB Color Test',
+            result: chalk.rgb(255, 165, 0)('Orange Text'),
+            css: 'color: rgb(255, 165, 0);'
+          },
+          {
+            name: 'Regular Color Test',
+            result: chalk.blue('Blue Text'),
+            css: 'color: #0000ff;'
+          },
+          {
+            name: 'Background Color Test',
+            result: chalk.bgYellow('Yellow Background'),
+            css: 'background-color: #ffff00;'
+          },
+          {
+            name: 'Bold Text Test',
+            result: chalk.bold('Bold Text'),
+            css: 'font-weight: bold;'
+          },
+          {
+            name: 'Combined Styles Test',
+            result: chalk.blue.bgYellow('Blue on Yellow'),
+            css: 'color: #0000ff; background-color: #ffff00;'
+          }
+        ];
+
+        // Run all tests and log results
+        tests.forEach(test => {
+          console.log(`${test.name}:`, test.result[0], test.result[1]);
+          console.log(...test.result)
+
+          // Display visual result on page
+          const resultDiv = document.createElement('div');
+          resultDiv.className = 'test-result';
+          resultDiv.innerHTML = `<strong>${test.name}:</strong> `;
+
+          const styledSpan = document.createElement('span');
+          styledSpan.textContent = test.result[0].replace('%c', '');
+          styledSpan.style.cssText = test.css;
+
+          resultDiv.appendChild(styledSpan);
+          visualResults.appendChild(resultDiv);
+        });
+
+        // Log completion
+        console.log('=== Test Complete ===');
+
+        // Display completion message
+        const completionDiv = document.createElement('div');
+        completionDiv.innerHTML = '<p><strong>All tests completed successfully!</strong></p>';
+        visualResults.appendChild(completionDiv);
+      } catch (error) {
+        console.error('Test failed:', error);
+        const errorDiv = document.createElement('div');
+        errorDiv.innerHTML = `
+          <h2>Test Error</h2>
+          <p>Error: ${error.message}</p>
+        `;
+        document.body.appendChild(errorDiv);
+      }
+    }
+
+    // Run tests when page loads
+    runChalkTests();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Chalk Browser Test</title>
+</head>
+
+<body>
+  <h1>Chalk Browser Test</h1>
+  <p>Open the browser console to see the test results</p>
+
+  <script type="module">
+    // Import chalk
+    const { default: chalk } = await import('../../source/chalk.browser.js');
+    //  import chalk from './source/index.js';
+
+    // Enable browser mode
+    chalk.isBrowserMode = true;
+
+    // Test various chalk functions
+    console.log('Testing chalk browser mode...');
+
+    // Debug: Check what chalk.hex returns
+    console.log('chalk.hex:', chalk.hex);
+    console.log('chalk.hex(\'#ff6347\'):', chalk.hex('#ff6347'));
+    console.log('chalk.hex(\'#ff6347\').bold:', chalk.hex('#ff6347').bold);
+    console.log('typeof chalk.hex(\'#ff6347\').bold:', typeof chalk.hex('#ff6347').bold);
+    console.log('chalk.hex(\'#ff6347\').bold.underline:', chalk.hex('#ff6347').bold.underline);
+    console.log('typeof chalk.hex(\'#ff6347\').bold.underline:', typeof chalk.hex('#ff6347').bold.underline);
+
+    // Test 1: Hex color
+    const hexResult = chalk.hex('#ff6347').bold.underline('Hello World');
+    console.log('Hex test:', hexResult);
+    console.log(hexResult[0], hexResult[1]);
+
+    // Test 2: Regular colors
+    const redResult = chalk.red.bold('Red Bold Text');
+    console.log('Red test:', redResult);
+    console.log(redResult[0], redResult[1]);
+
+    // Test 3: Multiple styles
+    const multiResult = chalk.blue.bgYellow.italic('Blue on Yellow');
+    console.log('Multi-style test:', multiResult);
+    console.log(multiResult[0], multiResult[1]);
+
+    // Test 4: RGB colors
+    const rgbResult = chalk.rgb(255, 165, 0).bold('Orange Bold Text');
+    console.log('RGB test:', rgbResult);
+    console.log(rgbResult[0], rgbResult[1]);
+
+    // Verify the results are in the correct format
+    const tests = [
+      { name: 'Hex result', result: hexResult },
+      { name: 'Red result', result: redResult },
+      { name: 'Multi-style result', result: multiResult },
+      { name: 'RGB result', result: rgbResult }
+    ];
+
+    let allPassed = true;
+
+    tests.forEach(test => {
+      const passed = Array.isArray(test.result) &&
+        test.result.length === 2 &&
+        typeof test.result[0] === 'string' &&
+        typeof test.result[1] === 'string' &&
+        test.result[0].startsWith('%c');
+
+      console.log(`${test.name}: ${passed ? 'PASS' : 'FAIL'}`);
+      if (!passed) allPassed = false;
+    });
+
+    console.log('All tests passed:', allPassed);
+
+    // Display results in the DOM
+    document.body.innerHTML += `
+      <h2>Test Results</h2>
+      <p>Check the browser console for detailed output.</p>
+      <p>All tests ${allPassed ? 'passed' : 'failed'}.</p>
+    `;
+  </script>
+</body>
+
+</html>

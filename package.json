@@ -1,13 +1,17 @@
 {
-	"name": "chalk",
+	"name": "uni-chalk",
 	"version": "5.6.2",
-	"description": "Terminal string styling done right",
+	"description": "Terminal string styling done right with universal compatibility for Node.js and Browser",
 	"license": "MIT",
-	"repository": "chalk/chalk",
-	"funding": "https://github.com/chalk/chalk?sponsor=1",
+	"repository": "missbjs/uni-chalk",
+	"funding": "https://github.com/missbjs/uni-chalk?sponsor=1",
 	"type": "module",
-	"main": "./source/index.js",
-	"exports": "./source/index.js",
+	"main": "./index.js",
+	"exports": {
+		".": "./index.js",
+		"./browser": "./source/chalk.browser.js",
+		"./node": "./source/index.js"
+	},
 	"imports": {
 		"#ansi-styles": "./source/vendor/ansi-styles/index.js",
 		"#supports-color": {
@@ -22,7 +26,9 @@
 	},
 	"scripts": {
 		"test": "xo && c8 ava && tsd",
-		"bench": "matcha benchmark.js"
+		"bench": "matcha benchmark.js",
+		"test:browser": "npx http-server . -o /test/html/test-browser.html",
+		"test:browser:console": "npx http-server . -o /test/html/console-test.html"
 	},
 	"files": [
 		"source",
@@ -48,16 +54,21 @@
 		"log",
 		"logging",
 		"command-line",
-		"text"
+		"text",
+		"browser",
+		"universal"
 	],
 	"devDependencies": {
+		"@playwright/test": "^1.56.1",
 		"@types/node": "^16.11.10",
 		"ava": "^3.15.0",
 		"c8": "^7.10.0",
 		"color-convert": "^2.0.1",
 		"execa": "^6.0.0",
+		"http-server": "^14.1.1",
 		"log-update": "^5.0.0",
 		"matcha": "^0.7.0",
+		"playwright": "^1.56.1",
 		"tsd": "^0.19.0",
 		"xo": "^0.57.0",
 		"yoctodelay": "^2.0.0"

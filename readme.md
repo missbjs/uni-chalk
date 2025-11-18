@@ -1,7 +1,7 @@
 <h1 align="center">
 	<br>
 	<br>
-	<img width="320" src="media/logo.svg" alt="Chalk">
+	<img width="320" src="media/logo.svg" alt="Uni-Chalk">
 	<br>
 	<br>
 	<br>
@@ -9,15 +9,15 @@
 
 > Terminal string styling done right
 
-[![Coverage Status](https://codecov.io/gh/chalk/chalk/branch/main/graph/badge.svg)](https://codecov.io/gh/chalk/chalk)
-[![npm dependents](https://badgen.net/npm/dependents/chalk)](https://www.npmjs.com/package/chalk?activeTab=dependents)
-[![Downloads](https://badgen.net/npm/dt/chalk)](https://www.npmjs.com/package/chalk)
+[![Coverage Status](https://codecov.io/gh/missbjs/uni-chalk/branch/main/graph/badge.svg)](https://codecov.io/gh/missbjs/uni-chalk)
+[![npm dependents](https://badgen.net/npm/dependents/uni-chalk)](https://www.npmjs.com/package/uni-chalk?activeTab=dependents)
+[![Downloads](https://badgen.net/npm/dt/uni-chalk)](https://www.npmjs.com/package/uni-chalk)
 
 ![](media/screenshot.png)
 
 ## Info
 
-- [Why not switch to a smaller coloring package?](https://github.com/chalk/chalk?tab=readme-ov-file#why-not-switch-to-a-smaller-coloring-package)
+- [Why not switch to a smaller coloring package?](https://github.com/missbjs/uni-chalk?tab=readme-ov-file#why-not-switch-to-a-smaller-coloring-package)
 - See [yoctocolors](https://github.com/sindresorhus/yoctocolors) for a smaller alternative
 
 ## Highlights
@@ -31,28 +31,35 @@
 - Doesn't extend `String.prototype`
 - Clean and focused
 - Actively maintained
-- [Used by ~115,000 packages](https://www.npmjs.com/browse/depended/chalk) as of July 4, 2024
+- Universal compatibility (Node.js and Browser)
+- Forked from the popular [chalk](https://github.com/chalk/chalk) package
+
+## About
+
+Uni-Chalk is a fork of the popular [chalk](https://github.com/chalk/chalk) package, enhanced with universal compatibility for both Node.js and browser environments. This package maintains all the original chalk functionality while adding browser support through CSS styling.
+
+Original chalk package: [https://github.com/chalk/chalk](https://github.com/chalk/chalk)
 
 ## Install
 
 ```sh
-npm install chalk
+npm install uni-chalk
 ```
 
-**IMPORTANT:** Chalk 5 is ESM. If you want to use Chalk with TypeScript or a build tool, you will probably want to use Chalk 4 for now. [Read more.](https://github.com/chalk/chalk/releases/tag/v5.0.0)
+**IMPORTANT:** Uni-Chalk 5 is ESM. If you want to use Uni-Chalk with TypeScript or a build tool, you will probably want to use Uni-Chalk 4 for now. [Read more.](https://github.com/missbjs/uni-chalk/releases/tag/v5.0.0)
 
 ## Usage
 
 ```js
-import chalk from 'chalk';
+import chalk from 'uni-chalk';
 
 console.log(chalk.blue('Hello world!'));
 ```
 
-Chalk comes with an easy to use composable API where you just chain and nest the styles you want.
+Uni-Chalk comes with an easy to use composable API where you just chain and nest the styles you want.
 
 ```js
-import chalk from 'chalk';
+import chalk from 'uni-chalk';
 
 const log = console.log;
 
@@ -90,7 +97,7 @@ log(chalk.hex('#DEADED').bold('Bold gray!'));
 Easily define your own themes:
 
 ```js
-import chalk from 'chalk';
+import chalk from 'uni-chalk';
 
 const error = chalk.bold.red;
 const warning = chalk.hex('#FFA500'); // Orange color
@@ -102,7 +109,7 @@ console.log(warning('Warning!'));
 Take advantage of console.log [string substitution](https://nodejs.org/docs/latest/api/console.html#console_console_log_data_args):
 
 ```js
-import chalk from 'chalk';
+import chalk from 'uni-chalk';
 
 const name = 'Sindre';
 console.log(chalk.green('Hello %s'), name);
@@ -123,12 +130,12 @@ Multiple arguments will be separated by space.
 
 Specifies the level of color support.
 
-Color support is automatically detected, but you can override it by setting the `level` property. You should however only do this in your own code as it applies globally to all Chalk consumers.
+Color support is automatically detected, but you can override it by setting the `level` property. You should however only do this in your own code as it applies globally to all Uni-Chalk consumers.
 
 If you need to change this in a reusable module, create a new instance:
 
 ```js
-import {Chalk} from 'chalk';
+import {Chalk} from 'uni-chalk';
 
 const customChalk = new Chalk({level: 0});
 ```
@@ -156,10 +163,10 @@ Explicit 256/Truecolor mode can be enabled using the `--color=256` and `--color=
 
 All supported style strings are exposed as an array of strings for convenience. `colorNames` is the combination of `foregroundColorNames` and `backgroundColorNames`.
 
-This can be useful if you wrap Chalk and need to validate input:
+This can be useful if you wrap Uni-Chalk and need to validate input:
 
 ```js
-import {modifierNames, foregroundColorNames} from 'chalk';
+import {modifierNames, foregroundColorNames} from 'uni-chalk';
 
 console.log(modifierNames.includes('bold'));
 //=> true
@@ -181,7 +188,7 @@ console.log(foregroundColorNames.includes('pink'));
 - `inverse`- Invert background and foreground colors.
 - `hidden` - Print the text but make it invisible.
 - `strikethrough` - Puts a horizontal line through the center of the text. *(Not widely supported)*
-- `visible`- Print the text only when Chalk has a color level above zero. Can be useful for things that are purely cosmetic.
+- `visible`- Print the text only when Uni-Chalk has a color level above zero. Can be useful for things that are purely cosmetic.
 
 ### Colors
 
@@ -223,9 +230,9 @@ console.log(foregroundColorNames.includes('pink'));
 
 ## 256 and Truecolor color support
 
-Chalk supports 256 colors and [Truecolor](https://github.com/termstandard/colors) (16 million colors) on supported terminal apps.
+Uni-Chalk supports 256 colors and [Truecolor](https://github.com/termstandard/colors) (16 million colors) on supported terminal apps.
 
-Colors are downsampled from 16 million RGB values to an ANSI color format that is supported by the terminal emulator (or by specifying `{level: n}` as a Chalk option). For example, Chalk configured to run at level 1 (basic color support) will downsample an RGB value of #FF0000 (red) to 31 (ANSI escape for red).
+Colors are downsampled from 16 million RGB values to an ANSI color format that is supported by the terminal emulator (or by specifying `{level: n}` as a Uni-Chalk option). For example, Uni-Chalk configured to run at level 1 (basic color support) will downsample an RGB value of #FF0000 (red) to 31 (ANSI escape for red).
 
 Examples:
 
@@ -245,7 +252,7 @@ The following color models can be used:
 
 ## Browser support
 
-Since Chrome 69, ANSI escape codes are natively supported in the developer console.
+Since Chrome 69, ANSI escape codes are natively supported in the developer console. In browser environments, Uni-Chalk automatically switches to CSS styling for better compatibility.
 
 ## Windows
 
@@ -255,17 +262,17 @@ If you're on Windows, do yourself a favor and use [Windows Terminal](https://git
 
 ### Why not switch to a smaller coloring package?
 
-Chalk may be larger, but there is a reason for that. It offers a more user-friendly API, well-documented types, supports millions of colors, and covers edge cases that smaller alternatives miss. Chalk is mature, reliable, and built to last.
+Uni-Chalk may be larger, but there is a reason for that. It offers a more user-friendly API, well-documented types, supports millions of colors, and covers edge cases that smaller alternatives miss. Uni-Chalk is mature, reliable, and built to last.
 
-But beyond the technical aspects, there's something more critical: trust and long-term maintenance. I have been active in open source for over a decade, and I'm committed to keeping Chalk maintained. Smaller packages might seem appealing now, but there's no guarantee they will be around for the long term, or that they won't become malicious over time.
+But beyond the technical aspects, there's something more critical: trust and long-term maintenance. I have been active in open source for over a decade, and I'm committed to keeping Uni-Chalk maintained. Smaller packages might seem appealing now, but there's no guarantee they will be around for the long term, or that they won't become malicious over time.
 
-Chalk is also likely already in your dependency tree (since 100K+ packages depend on it), so switching won’t save space—in fact, it might increase it. npm deduplicates dependencies, so multiple Chalk instances turn into one, but adding another package alongside it will increase your overall size.
+Uni-Chalk is also likely already in your dependency tree (since 100K+ packages depend on the original chalk), so switching won't save space—in fact, it might increase it. npm deduplicates dependencies, so multiple Uni-Chalk instances turn into one, but adding another package alongside it will increase your overall size.
 
-If the goal is to clean up the ecosystem, switching away from Chalk won’t even make a dent. The real problem lies with packages that have very deep dependency trees (for example, those including a lot of polyfills). Chalk has no dependencies. It's better to focus on impactful changes rather than minor optimizations.
+If the goal is to clean up the ecosystem, switching away from Uni-Chalk won't even make a dent. The real problem lies with packages that have very deep dependency trees (for example, those including a lot of polyfills). Uni-Chalk has no dependencies. It's better to focus on impactful changes rather than minor optimizations.
 
 If absolute package size is important to you, I also maintain [yoctocolors](https://github.com/sindresorhus/yoctocolors), one of the smallest color packages out there.
 
-*\- [Sindre](https://github.com/sindresorhus)*
+\- [Sindre](https://github.com/sindresorhus)
 
 ### But the smaller coloring package has benchmarks showing it is faster
 
@@ -293,5 +300,9 @@ If absolute package size is important to you, I also maintain [yoctocolors](http
 
 ## Maintainers
 
-- [Sindre Sorhus](https://github.com/sindresorhus)
-- [Josh Junon](https://github.com/qix-)
+- [Original Chalk Maintainers](https://github.com/chalk/chalk#maintainers)
+- [Missbjs](https://github.com/missbjs) (Uni-Chalk fork maintainer)
+
+## Repository
+
+[https://github.com/missbjs/uni-chalk](https://github.com/missbjs/uni-chalk)
